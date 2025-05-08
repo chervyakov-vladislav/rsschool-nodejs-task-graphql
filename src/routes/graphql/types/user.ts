@@ -11,7 +11,7 @@ import { GraphQLContext } from './common.js';
 import { getProfileByUserId } from '../services/profile.service.js';
 import { PostResponse } from './post.js';
 import { getPostsByAuthorId } from '../services/post.service.js';
-import { getUserSubscrbers, getUserSubscriptions } from '../services/user.service.js';
+import { getSubscribedToUser, getUserSubscribedTo } from '../services/user.service.js';
 
 export const UserResponse = new GraphQLObjectType({
   name: 'UserResponse',
@@ -35,13 +35,13 @@ export const UserResponse = new GraphQLObjectType({
     userSubscribedTo: {
       type: new GraphQLList(UserResponse),
       resolve: async ({ id }: { id: string }, _args, { prisma }: GraphQLContext) =>
-        getUserSubscriptions(id, prisma),
+        getUserSubscribedTo(id, prisma),
     },
 
     subscribedToUser: {
       type: new GraphQLList(UserResponse),
       resolve: async ({ id }: { id: string }, _args, { prisma }: GraphQLContext) =>
-        getUserSubscrbers(id, prisma),
+        getSubscribedToUser(id, prisma),
     },
   }),
 });

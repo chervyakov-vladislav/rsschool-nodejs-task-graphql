@@ -12,20 +12,30 @@ export const getUser = async (id: string, prisma: PrismaClient) => {
   return user;
 };
 
-export const getUserSubscriptions = async (id: string, prisma: PrismaClient) => {
-  const subscriptions = await prisma.subscribersOnAuthors.findMany({
-    where: { subscriberId: id },
-    include: { author: true },
+export const getUserSubscribedTo = async (id: string, prisma: PrismaClient) => {
+  const subscriptions = await prisma.user.findMany({
+    where: {
+      subscribedToUser: {
+        some: {
+          subscriberId: id,
+        },
+      },
+    },
   });
 
-  return subscriptions.map((subscription) => subscription.author);
+  return subscriptions;
 };
 
-export const getUserSubscrbers = async (id: string, prisma: PrismaClient) => {
-  const subscriptions = await prisma.subscribersOnAuthors.findMany({
-    where: { authorId: id },
-    include: { subscriber: true },
+export const getSubscribedToUser = async (id: string, prisma: PrismaClient) => {
+  const subscriptions = await prisma.user.findMany({
+    where: {
+      userSubscribedTo: {
+        some: {
+          authorId: id,
+        },
+      },
+    },
   });
 
-  return subscriptions.map((subscription) => subscription.subscriber);
+  return subscriptions;
 };
