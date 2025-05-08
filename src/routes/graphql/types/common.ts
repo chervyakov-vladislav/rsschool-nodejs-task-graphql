@@ -9,7 +9,7 @@ export enum MemberType {
   BUSINESS = 'BUSINESS',
 }
 
-export interface CreatePostDto {
+export interface PostDto {
   title: string;
   content: string;
   authorId: string;

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { CreatePostDto } from '../types/common.js';
+import { PostDto } from '../types/common.js';
 
 export const getPosts = async (prisma: PrismaClient) => {
   const posts = await prisma.post.findMany();
@@ -19,8 +19,25 @@ export const getPostsByAuthorId = async (id: string, prisma: PrismaClient) => {
   return posts;
 };
 
-export const createPost = async (dto: CreatePostDto, prisma: PrismaClient) => {
-  const newPost = prisma.post.create({ data: dto });
+export const createPost = async (dto: PostDto, prisma: PrismaClient) => {
+  const newPost = await prisma.post.create({ data: dto, include: { author: true } });
+
+  console.log(newPost);
 
   return newPost;
+};
+
+export const changePost = async (id: string, dto: PostDto, prisma: PrismaClient) => {
+  const newPost = await prisma.post.update({
+    data: dto,
+    where: { id },
+  });
+
+  return newPost;
+};
+
+export const deletePost = async (id: string, prisma: PrismaClient) => {
+  const deletedPostId = await prisma.post.delete({ where: { id }, select: { id: true } });
+
+  return deletedPostId;
 };
