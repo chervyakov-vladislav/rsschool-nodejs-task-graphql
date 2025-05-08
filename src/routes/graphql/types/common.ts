@@ -8,3 +8,9 @@ export enum MemberType {
   BASIC = 'BASIC',
   BUSINESS = 'BUSINESS',
 }
+
+export interface CreatePostDto {
+  title: string;
+  content: string;
+  authorId: string;
+}
