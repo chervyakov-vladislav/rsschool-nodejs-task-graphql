@@ -13,7 +13,7 @@ import { PostResponse } from './post.js';
 import { getPostsByAuthorId } from '../services/post.service.js';
 import { getSubscribedToUser, getUserSubscribedTo } from '../services/user.service.js';
 
-export const UserResponse = new GraphQLObjectType({
+export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
   name: 'UserResponse',
   fields: () => ({
     id: { type: new GraphQLNonNull(UUIDType) },
