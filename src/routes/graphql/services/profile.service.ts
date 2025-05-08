@@ -11,3 +11,9 @@ export const getProfile = async (id: string, prisma: PrismaClient) => {
 
   return profile;
 };
+
+export const getProfileByUserId = async (id: string, prisma: PrismaClient) => {
+  const profile = await prisma.profile.findUnique({ where: { userId: id } });
+
+  return profile;
+};

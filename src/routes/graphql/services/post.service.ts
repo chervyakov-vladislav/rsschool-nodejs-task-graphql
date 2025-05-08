@@ -11,3 +11,9 @@ export const getPost = async (id: string, prisma: PrismaClient) => {
 
   return post;
 };
+
+export const getPostsByAuthorId = async (id: string, prisma: PrismaClient) => {
+  const posts = await prisma.post.findMany({ where: { authorId: id } });
+
+  return posts;
+};
