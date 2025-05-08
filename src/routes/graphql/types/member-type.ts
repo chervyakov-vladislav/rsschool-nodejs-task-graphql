@@ -9,13 +9,13 @@ import { MemberType } from './common.js';
 export const MemberTypeIdEnum = new GraphQLEnumType({
   name: 'MemberTypeId',
   values: {
-    BASIC: { value: MemberType.BASIC },
-    BUSINESS: { value: MemberType.BUSINESS },
+    [MemberType.BASIC]: { value: MemberType.BASIC },
+    [MemberType.BUSINESS]: { value: MemberType.BUSINESS },
   },
 });
 
 export const MemberTypeResponse = new GraphQLObjectType({
-  name: 'MemberType',
+  name: 'MemberTypeResponse',
   fields: {
     id: { type: new GraphQLNonNull(MemberTypeIdEnum) },
     discount: { type: new GraphQLNonNull(GraphQLFloat) },

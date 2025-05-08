@@ -8,7 +8,7 @@ export const getMemberTypes = async (prisma: PrismaClient) => {
 };
 
 export const getMemberType = async (id: MemberType, prisma: PrismaClient) => {
-  const memberType = await prisma.memberType.findFirst({ where: { id } });
+  const memberType = await prisma.memberType.findUnique({ where: { id } });
 
   return memberType;
 };
