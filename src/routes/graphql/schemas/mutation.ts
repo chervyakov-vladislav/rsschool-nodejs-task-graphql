@@ -1,8 +1,16 @@
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import { CreatePostInput, PostResponse } from '../types/post.js';
-import { PostDto, GraphQLContext } from '../types/common.js';
+import { ChangePostInput, CreatePostInput, PostResponse } from '../types/post.js';
+import { PostDto, GraphQLContext, UserDto } from '../types/common.js';
 import { changePost, createPost, deletePost } from '../services/post.service.js';
 import { UUIDType } from '../types/uuid.js';
+import { ChangeUserInput, CreateUserInput, UserResponse } from '../types/user.js';
+import {
+  changeUser,
+  createUser,
+  deleteUser,
+  subscribeTo,
+  unsubscribeFrom,
+} from '../services/user.service.js';
 
 export const mutation = new GraphQLObjectType({
   name: 'RootMutationType',
@@ -18,7 +26,7 @@ export const mutation = new GraphQLObjectType({
       type: PostResponse,
       args: {
         id: { type: new GraphQLNonNull(UUIDType) },
-        dto: { type: new GraphQLNonNull(CreatePostInput) },
+        dto: { type: new GraphQLNonNull(ChangePostInput) },
       },
       resolve: async (
         _source,
@@ -35,10 +43,56 @@ export const mutation = new GraphQLObjectType({
     },
 
     createUser: {
-      type: GraphQLString,
-      resolve: async () => {
-        return 'Hello';
+      type: UserResponse,
+      args: { dto: { type: new GraphQLNonNull(CreateUserInput) } },
+      resolve: async (_source, { dto }: { dto: UserDto }, { prisma }: GraphQLContext) =>
+        createUser(dto, prisma),
+    },
+
+    changeUser: {
+      type: UserResponse,
+      args: {
+        id: { type: new GraphQLNonNull(UUIDType) },
+        dto: { type: new GraphQLNonNull(ChangeUserInput) },
       },
+      resolve: async (
+        _source,
+        { dto, id }: { dto: UserDto; id: string },
+        { prisma }: GraphQLContext,
+      ) => changeUser(id, dto, prisma),
+    },
+
+    deleteUser: {
+      type: GraphQLString,
+      args: { id: { type: new GraphQLNonNull(UUIDType) } },
+      resolve: async (_source, { id }: { id: string }, { prisma }: GraphQLContext) =>
+        deleteUser(id, prisma),
+    },
+
+    subscribeTo: {
+      type: GraphQLString,
+      args: {
+        userId: { type: new GraphQLNonNull(UUIDType) },
+        authorId: { type: new GraphQLNonNull(UUIDType) },
+      },
+      resolve: async (
+        _source,
+        { userId, authorId }: { userId: string; authorId: string },
+        { prisma }: GraphQLContext,
+      ) => subscribeTo(userId, authorId, prisma),
+    },
+
+    unsubscribeFrom: {
+      type: GraphQLString,
+      args: {
+        userId: { type: new GraphQLNonNull(UUIDType) },
+        authorId: { type: new GraphQLNonNull(UUIDType) },
+      },
+      resolve: async (
+        _source,
+        { userId, authorId }: { userId: string; authorId: string },
+        { prisma }: GraphQLContext,
+      ) => unsubscribeFrom(userId, authorId, prisma),
     },
 
     createProfile: {

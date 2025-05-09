@@ -22,8 +22,6 @@ export const getPostsByAuthorId = async (id: string, prisma: PrismaClient) => {
 export const createPost = async (dto: PostDto, prisma: PrismaClient) => {
   const newPost = await prisma.post.create({ data: dto, include: { author: true } });
 
-  console.log(newPost);
-
   return newPost;
 };
 
@@ -37,7 +35,7 @@ export const changePost = async (id: string, dto: PostDto, prisma: PrismaClient)
 };
 
 export const deletePost = async (id: string, prisma: PrismaClient) => {
-  const deletedPostId = await prisma.post.delete({ where: { id }, select: { id: true } });
+  const deletedPost = await prisma.post.delete({ where: { id }, select: { id: true } });
 
-  return deletedPostId;
+  return deletedPost.id;
 };

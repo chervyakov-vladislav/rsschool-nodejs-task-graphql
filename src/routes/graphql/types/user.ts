@@ -4,6 +4,7 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLList,
+  GraphQLInputObjectType,
 } from 'graphql';
 import { UUIDType } from './uuid.js';
 import { ProfileResponse } from './profile.js';
@@ -44,4 +45,20 @@ export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
         getSubscribedToUser(id, prisma),
     },
   }),
+});
+
+export const CreateUserInput = new GraphQLInputObjectType({
+  name: 'CreateUserInput',
+  fields: {
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    balance: { type: new GraphQLNonNull(GraphQLFloat) },
+  },
+});
+
+export const ChangeUserInput = new GraphQLInputObjectType({
+  name: 'ChangeUserInput',
+  fields: {
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    balance: { type: new GraphQLNonNull(GraphQLFloat) },
+  },
 });

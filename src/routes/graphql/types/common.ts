@@ -14,3 +14,8 @@ export interface PostDto {
   content: string;
   authorId: string;
 }
+
+export interface UserDto {
+  name: string;
+  balance: number;
+}
