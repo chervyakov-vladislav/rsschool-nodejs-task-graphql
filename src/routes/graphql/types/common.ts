@@ -19,3 +19,10 @@ export interface UserDto {
   name: string;
   balance: number;
 }
+
+export interface ProfileDto {
+  isMale: boolean;
+  yearOfBirth: number;
+  userId: string;
+  memberTypeId: string;
+}

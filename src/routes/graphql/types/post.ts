@@ -28,7 +28,7 @@ export const CreatePostInput = new GraphQLInputObjectType({
 export const ChangePostInput = new GraphQLInputObjectType({
   name: 'ChangePostInput',
   fields: {
-    title: { type: new GraphQLNonNull(GraphQLString) },
-    content: { type: new GraphQLNonNull(GraphQLString) },
+    title: { type: GraphQLString },
+    content: { type: GraphQLString },
   },
 });
