@@ -76,7 +76,6 @@ export const subscribeTo = async (
     },
   });
 
-  // непонятно что возвращать. скорее всего нужно будет возвращать юзера целиком
   return subscriber.subscriberId;
 };
 
@@ -94,6 +93,5 @@ export const unsubscribeFrom = async (
     },
   });
 
-  // непонятно что возвращать. скорее всего нужно будет возвращать юзера целиком
   return result.authorId;
 };

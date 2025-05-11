@@ -8,7 +8,6 @@ import {
 import { UUIDType } from './uuid.js';
 import { MemberTypeIdEnum, MemberTypeResponse } from './member-type.js';
 import { GraphQLContext, MemberType } from './common.js';
-import { getMemberType } from '../services/member-type.service.js';
 
 export const ProfileResponse = new GraphQLObjectType({
   name: 'ProfileResponse',
@@ -23,8 +22,8 @@ export const ProfileResponse = new GraphQLObjectType({
       resolve: async (
         { memberTypeId }: { memberTypeId: MemberType },
         _args,
-        { prisma }: GraphQLContext,
-      ) => getMemberType(memberTypeId, prisma),
+        { memberTypeLoader }: GraphQLContext,
+      ) => memberTypeLoader.load(memberTypeId),
     },
   }),
 });

@@ -8,14 +8,12 @@ import {
 } from 'graphql';
 import { UUIDType } from './uuid.js';
 import { ProfileResponse } from './profile.js';
-import { GraphQLContext } from './common.js';
-import { getProfileByUserId } from '../services/profile.service.js';
+import { GraphQLContext, Subscribe } from './common.js';
 import { PostResponse } from './post.js';
-import { getPostsByAuthorId } from '../services/post.service.js';
-import { getSubscribedToUser, getUserSubscribedTo } from '../services/user.service.js';
 
 export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
   name: 'UserResponse',
+  // @ts-ignore
   fields: () => ({
     id: { type: new GraphQLNonNull(UUIDType) },
     name: { type: new GraphQLNonNull(GraphQLString) },
@@ -23,26 +21,38 @@ export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
 
     profile: {
       type: ProfileResponse,
-      resolve: async ({ id }: { id: string }, _args, { prisma }: GraphQLContext) =>
-        getProfileByUserId(id, prisma),
+      resolve: async ({ id }: { id: string }, _args, { profileLoader }: GraphQLContext) =>
+        profileLoader.load(id),
     },
 
     posts: {
       type: new GraphQLList(PostResponse),
-      resolve: async ({ id }: { id: string }, _args, { prisma }: GraphQLContext) =>
-        getPostsByAuthorId(id, prisma),
+      resolve: async ({ id }: { id: string }, _args, { postsLoader }: GraphQLContext) =>
+        postsLoader.load(id),
     },
 
     userSubscribedTo: {
       type: new GraphQLList(UserResponse),
-      resolve: async ({ id }: { id: string }, _args, { prisma }: GraphQLContext) =>
-        getUserSubscribedTo(id, prisma),
+      resolve: async (
+        { userSubscribedTo }: { userSubscribedTo?: Subscribe[] },
+        _args,
+        { usersLoader }: GraphQLContext,
+      ) =>
+        userSubscribedTo
+          ? usersLoader.loadMany(userSubscribedTo.map(({ authorId }) => authorId))
+          : Promise.resolve([]),
     },
 
     subscribedToUser: {
       type: new GraphQLList(UserResponse),
-      resolve: async ({ id }: { id: string }, _args, { prisma }: GraphQLContext) =>
-        getSubscribedToUser(id, prisma),
+      resolve: async (
+        { subscribedToUser }: { subscribedToUser?: Subscribe[] },
+        _args,
+        { usersLoader }: GraphQLContext,
+      ) =>
+        subscribedToUser
+          ? usersLoader.loadMany(subscribedToUser.map(({ subscriberId }) => subscriberId))
+          : Promise.resolve([]),
     },
   }),
 });
