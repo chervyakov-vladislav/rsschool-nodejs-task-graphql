@@ -39,7 +39,7 @@ export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
       ) =>
         userSubscribedTo
           ? usersLoader.loadMany(userSubscribedTo.map(({ authorId }) => authorId))
-          : Promise.resolve([]),
+          : null,
     },
 
     subscribedToUser: {
@@ -51,7 +51,7 @@ export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
       ) =>
         subscribedToUser
           ? usersLoader.loadMany(subscribedToUser.map(({ subscriberId }) => subscriberId))
-          : Promise.resolve([]),
+          : null,
     },
   }),
 });

@@ -52,14 +52,19 @@ export const query = new GraphQLObjectType({
 
     users: {
       type: new GraphQLList(UserResponse),
-      resolve: async (_source, _args, { prisma }: GraphQLContext) => getUsers(prisma),
+      resolve: async (
+        _source,
+        _args,
+        { prisma, usersLoader }: GraphQLContext,
+        resolveInfo,
+      ) => getUsers(prisma, usersLoader, resolveInfo),
     },
 
     user: {
       type: UserResponse,
       args: { id: { type: new GraphQLNonNull(UUIDType) } },
-      resolve: async (_source, { id }: { id: string }, { prisma }: GraphQLContext) =>
-        getUser(id, prisma),
+      resolve: async (_source, { id }: { id: string }, { usersLoader }: GraphQLContext) =>
+        getUser(id, usersLoader),
     },
   },
 });

@@ -1,14 +1,36 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { UserDto } from '../types/common.js';
+import DataLoader from 'dataloader';
+import { GraphQLResolveInfo } from 'graphql';
+import { parseResolveInfo, ResolveTree, simplify } from 'graphql-parse-resolve-info';
 
-export const getUsers = async (prisma: PrismaClient) => {
-  const users = await prisma.user.findMany();
+export const getUsers = async (
+  prisma: PrismaClient,
+  usersLoader: DataLoader<string, User>,
+  resolveInfo: GraphQLResolveInfo,
+) => {
+  const parsedResolveInfoFragment = parseResolveInfo(resolveInfo) as ResolveTree;
+  const { fields }: { fields: Record<string, string> } = simplify(
+    parsedResolveInfoFragment,
+    resolveInfo.returnType,
+  );
+
+  const users = await prisma.user.findMany({
+    include: {
+      userSubscribedTo: Boolean(fields.userSubscribedTo),
+      subscribedToUser: Boolean(fields.subscribedToUser),
+    },
+  });
+
+  users.forEach((user) => {
+    usersLoader.prime(user.id, user);
+  });
 
   return users;
 };
 
-export const getUser = async (id: string, prisma: PrismaClient) => {
-  const user = await prisma.user.findUnique({ where: { id } });
+export const getUser = async (id: string, usersLoader: DataLoader<string, User>) => {
+  const user = await usersLoader.load(id);
 
   return user;
 };
