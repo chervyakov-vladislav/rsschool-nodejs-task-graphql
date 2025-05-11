@@ -37,9 +37,9 @@ export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
         _args,
         { usersLoader }: GraphQLContext,
       ) =>
-        userSubscribedTo
-          ? usersLoader.loadMany(userSubscribedTo.map(({ authorId }) => authorId))
-          : null,
+        usersLoader.loadMany(
+          userSubscribedTo ? userSubscribedTo.map(({ authorId }) => authorId) : [],
+        ),
     },
 
     subscribedToUser: {
@@ -49,9 +49,11 @@ export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
         _args,
         { usersLoader }: GraphQLContext,
       ) =>
-        subscribedToUser
-          ? usersLoader.loadMany(subscribedToUser.map(({ subscriberId }) => subscriberId))
-          : null,
+        usersLoader.loadMany(
+          subscribedToUser
+            ? subscribedToUser.map(({ subscriberId }) => subscriberId)
+            : [],
+        ),
     },
   }),
 });
