@@ -22,8 +22,8 @@ export const ProfileResponse = new GraphQLObjectType({
       resolve: async (
         { memberTypeId }: { memberTypeId: MemberType },
         _args,
-        { memberTypeLoader }: GraphQLContext,
-      ) => memberTypeLoader.load(memberTypeId),
+        { memberLoader }: GraphQLContext,
+      ) => memberLoader.load(memberTypeId),
     },
   }),
 });

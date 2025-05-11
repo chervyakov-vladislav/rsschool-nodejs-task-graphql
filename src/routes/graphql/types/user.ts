@@ -13,7 +13,6 @@ import { PostResponse } from './post.js';
 
 export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
   name: 'UserResponse',
-  // @ts-ignore
   fields: () => ({
     id: { type: new GraphQLNonNull(UUIDType) },
     name: { type: new GraphQLNonNull(GraphQLString) },
@@ -34,7 +33,7 @@ export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
     userSubscribedTo: {
       type: new GraphQLList(UserResponse),
       resolve: async (
-        { userSubscribedTo }: { userSubscribedTo?: Subscribe[] },
+        { userSubscribedTo }: { id: string; userSubscribedTo?: Subscribe[] },
         _args,
         { usersLoader }: GraphQLContext,
       ) =>
@@ -46,7 +45,7 @@ export const UserResponse: GraphQLObjectType = new GraphQLObjectType({
     subscribedToUser: {
       type: new GraphQLList(UserResponse),
       resolve: async (
-        { subscribedToUser }: { subscribedToUser?: Subscribe[] },
+        { subscribedToUser }: { id: string; subscribedToUser?: Subscribe[] },
         _args,
         { usersLoader }: GraphQLContext,
       ) =>

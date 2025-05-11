@@ -1,10 +1,10 @@
-import { Post, PrismaClient, Profile } from '@prisma/client';
+import { Post, PrismaClient, Profile, User } from '@prisma/client';
 import DataLoader from 'dataloader';
 
 interface Loaders {
   profileLoader: DataLoader<string, Profile>;
   postsLoader: DataLoader<string, Post[]>;
-  memberTypeLoader: DataLoader<string, MemberType>;
+  memberLoader: DataLoader<string, MemberType>;
   usersLoader: DataLoader<string, User>;
 }
 export interface GraphQLContext extends Loaders {
@@ -37,8 +37,4 @@ export interface ProfileDto {
 export interface Subscribe {
   subscriberId: string;
   authorId: string;
-}
-
-export interface User extends UserDto {
-  id: string;
 }
